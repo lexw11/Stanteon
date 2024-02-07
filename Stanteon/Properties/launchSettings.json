@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Stanteon": {
+    "StanteonApi": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
