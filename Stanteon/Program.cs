@@ -7,12 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<StantreonContext>(options =>
 {
-    //options.UseSqlServer(
-    //    builder.Configuration.GetConnectionString(
-    //        "DefaultConnection"
-    //    )
-    //);
-    options.UseInMemoryDatabase("Stantreon");
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString(
+            "DefaultConnection"
+        )
+    );
+    //options.UseInMemoryDatabase("Stantreon");
     //.UseLoggerFactory(LoggerFactory.Create(builder =>
     //{
     //    builder.AddDebug();
