@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StanteonApi.Models;
-using StanteonApi.Models.Users;
+using StantreonApi.Models;
+using StantreonApi.Models.Users;
 
-namespace StanteonApi.Controllers.Users;
+namespace StantreonApi.Controllers.Users;
 
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly StanteonContext _context;
+    private readonly StantreonContext _context;
 
-    public UsersController(StanteonContext context)
+    public UsersController(StantreonContext context)
     {
         _context = context;
     }
@@ -83,7 +83,7 @@ public class UsersController : ControllerBase
     {
         if (_context.Users == null)
         {
-            return Problem("Entity set 'StanteonContext.Users'  is null.");
+            return Problem("Entity set 'StantreonContext.Users'  is null.");
         }
         _context.Users.Add(user);
         await _context.SaveChangesAsync();

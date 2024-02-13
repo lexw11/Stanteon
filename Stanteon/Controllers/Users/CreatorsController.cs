@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StanteonApi.Models;
-using StanteonApi.Models.Users;
+using StantreonApi.Models;
+using StantreonApi.Models.Users;
 
-namespace StanteonApi.Controllers.Users;
+namespace StantreonApi.Controllers.Users;
 
 [Route("api/[controller]")]
 [ApiController]
 public class CreatorsController : ControllerBase
 {
-    private readonly StanteonContext _context;
+    private readonly StantreonContext _context;
 
-    public CreatorsController(StanteonContext context)
+    public CreatorsController(StantreonContext context)
     {
         _context = context;
     }
@@ -88,7 +88,7 @@ public class CreatorsController : ControllerBase
     {
         if (_context.Creators == null)
         {
-            return Problem("Entity set 'StanteonContext.Creators'  is null.");
+            return Problem("Entity set 'StantreonContext.Creators'  is null.");
         }
         _context.Creators.Add(user);
         await _context.SaveChangesAsync();

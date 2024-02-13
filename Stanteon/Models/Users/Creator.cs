@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StanteonApi.Models.Users;
+namespace StantreonApi.Models.Users;
 
 public class Creator : User
 {

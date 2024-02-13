@@ -1,18 +1,18 @@
 using Microsoft.EntityFrameworkCore;
-using StanteonApi.Models;
+using StantreonApi.Models;
 using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<StanteonContext>(options =>
+builder.Services.AddDbContext<StantreonContext>(options =>
 {
     //options.UseSqlServer(
     //    builder.Configuration.GetConnectionString(
     //        "DefaultConnection"
     //    )
     //);
-    options.UseInMemoryDatabase("Stanteon");
+    options.UseInMemoryDatabase("Stantreon");
     //.UseLoggerFactory(LoggerFactory.Create(builder =>
     //{
     //    builder.AddDebug();

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StanteonApi.Models.Users;
+using StantreonApi.Models.Users;
 
-namespace StanteonApi.Models;
+namespace StantreonApi.Models;
 
-public class StanteonContext : DbContext
+public class StantreonContext : DbContext
 {
-    public StanteonContext(DbContextOptions<StanteonContext> options) : base(options) { }
+    public StantreonContext(DbContextOptions<StantreonContext> options) : base(options) { }
 
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Member> Members { get; set; } = null!;

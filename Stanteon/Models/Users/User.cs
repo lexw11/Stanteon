@@ -1,4 +1,4 @@
-﻿namespace StanteonApi.Models.Users;
+﻿namespace StantreonApi.Models.Users;
 
 public abstract class User
 {
