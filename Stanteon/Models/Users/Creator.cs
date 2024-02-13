@@ -4,7 +4,7 @@ namespace StantreonApi.Models.Users;
 
 public class Creator : User
 {
-    public string pageName { get; set; }
+    public string PageName { get; set; }
 
-    public string urlName { get; set; }
+    public string UrlHandle { get; set; }
 }

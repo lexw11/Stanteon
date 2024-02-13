@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StantreonApi.Models;
 
@@ -10,9 +11,11 @@ using StantreonApi.Models;
 namespace StantreonApi.Migrations
 {
     [DbContext(typeof(StantreonContext))]
-    partial class StantreonContextModelSnapshot : ModelSnapshot
+    [Migration("20240213043228_ChangedCreatorUrlPropertyName")]
+    partial class ChangedCreatorUrlPropertyName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,11 +58,11 @@ namespace StantreonApi.Migrations
                 {
                     b.HasBaseType("StantreonApi.Models.Users.User");
 
-                    b.Property<string>("PageName")
+                    b.Property<string>("pageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UrlHandle")
+                    b.Property<string>("urlHandle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
