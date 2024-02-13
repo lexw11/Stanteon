@@ -1,20 +1,37 @@
 using Microsoft.EntityFrameworkCore;
 using StanteonApi.Models;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseInMemoryDatabase("Stanteon"));
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddDbContext<StanteonContext>(options =>
+{
+    //options.UseSqlServer(
+    //    builder.Configuration.GetConnectionString(
+    //        "DefaultConnection"
+    //    )
+    //);
+    options.UseInMemoryDatabase("Stanteon");
+    //.UseLoggerFactory(LoggerFactory.Create(builder =>
+    //{
+    //    builder.AddDebug();
+    //    builder.AddConsole();
+    //}));
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+//    dbContext.Database.Migrate();
+//}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
