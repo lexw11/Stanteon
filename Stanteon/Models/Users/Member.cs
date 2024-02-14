@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace StantreonApi.Models.Users;
+﻿namespace StantreonApi.Models.Users;
 
 public class Member : User
 {
