@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StantreonApi.Models;
 
@@ -10,9 +11,11 @@ using StantreonApi.Models;
 namespace StantreonApi.Migrations
 {
     [DbContext(typeof(StantreonContext))]
-    partial class StantreonContextModelSnapshot : ModelSnapshot
+    [Migration("20240214030235_AddRelationshipMembersCreators")]
+    partial class AddRelationshipMembersCreators
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

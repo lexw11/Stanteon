@@ -11,4 +11,6 @@ public class Creator : User
 
     [Required]
     public string UrlHandle { get; set; }
+
+    public ICollection<Member> Members { get; set; }
 }
