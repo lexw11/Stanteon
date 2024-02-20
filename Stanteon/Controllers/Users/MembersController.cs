@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StantreonApi.Dtos.Users;
 using StantreonApi.Models;
 using StantreonApi.Models.Users;
 
@@ -23,44 +26,59 @@ public class MembersController : ControllerBase
 
     // GET: api/Members
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Member>>> GetMembers()
+    public async Task<ActionResult<IEnumerable<MemberDto>>> GetMembers()
     {
         if (_context.Members == null)
         {
             return NotFound();
         }
-        return await _context.Members.ToListAsync();
+        return await _context.Members
+            .Select(member => MemberToDto(member))
+            .ToListAsync();
     }
 
     // GET: api/Members/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Member>> GetMember(long id)
+    public async Task<ActionResult<MemberDto>> GetMember(long id)
     {
         if (_context.Members == null)
         {
             return NotFound();
         }
-        var user = await _context.Members.FindAsync(id);
+        var member = await _context.Members.FindAsync(id);
 
-        if (user == null)
+        if (member == null)
         {
             return NotFound();
         }
 
-        return user;
+        return MemberToDto(member);
     }
 
     // PUT: api/Members/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutMember(long id, Member user)
+    public async Task<IActionResult> PutMember(long id, MemberDto memberDto)
     {
-        if (id != user.UserId)
+        if (id != memberDto.UserId)
         {
             return BadRequest();
         }
 
-        _context.Entry(user).State = EntityState.Modified;
+        var member = await _context.Members.FindAsync(id);
+        if (member == null)
+        {
+            return NotFound();
+        }
+
+        member.UserId = memberDto.UserId;
+        member.Email = memberDto.Email;
+        member.Phone = memberDto.Phone;
+        member.FirstName = memberDto.FirstName;
+        member.LastName = memberDto.LastName;
+        member.DisplayName = memberDto.DisplayName;
+
+        _context.Entry(member).State = EntityState.Modified;
 
         try
         {
@@ -84,16 +102,27 @@ public class MembersController : ControllerBase
     // POST: api/Members
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Member>> PostMember(Member user)
+    public async Task<ActionResult<MemberDto>> PostMember(MemberDto memberDto)
     {
         if (_context.Members == null)
         {
             return Problem("Entity set 'StantreonContext.Members'  is null.");
         }
-        _context.Members.Add(user);
+
+        var member = new Member
+        {
+            UserId = memberDto.UserId,
+            Email = memberDto.Email,
+            Phone = memberDto.Phone,
+            FirstName = memberDto.FirstName,
+            LastName = memberDto.LastName,
+            DisplayName = memberDto.DisplayName,
+        };
+
+        _context.Members.Add(member);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetMember", new { id = user.UserId }, user);
+        return CreatedAtAction("GetMember", new { id = member.UserId }, MemberToDto(member));
     }
 
     // DELETE: api/Members/5
@@ -120,4 +149,15 @@ public class MembersController : ControllerBase
     {
         return (_context.Members?.Any(e => e.UserId == id)).GetValueOrDefault();
     }
+
+    private static MemberDto MemberToDto(Member member) =>
+        new MemberDto
+        {
+            UserId = member.UserId,
+            Email = member.Email,
+            Phone = member.Phone,
+            FirstName = member.FirstName,
+            LastName = member.LastName,
+            DisplayName = member.DisplayName,
+        };
 }

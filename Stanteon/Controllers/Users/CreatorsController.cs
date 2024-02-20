@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using StantreonApi.Dtos.Users;
 using StantreonApi.Models;
 using StantreonApi.Models.Users;
 
@@ -23,44 +25,60 @@ public class CreatorsController : ControllerBase
 
     // GET: api/Creators
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Creator>>> GetCreators()
+    public async Task<ActionResult<IEnumerable<CreatorDto>>> GetCreators()
     {
         if (_context.Creators == null)
         {
             return NotFound();
         }
-        return await _context.Creators.ToListAsync();
+        return await _context.Creators
+            .Select(creator => CreatorToDto(creator))
+            .ToListAsync();
     }
 
     // GET: api/Creators/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Creator>> GetCreator(long id)
+    public async Task<ActionResult<CreatorDto>> GetCreator(long id)
     {
         if (_context.Creators == null)
         {
             return NotFound();
         }
-        var user = await _context.Creators.FindAsync(id);
+        var creator = await _context.Creators.FindAsync(id);
 
-        if (user == null)
+        if (creator == null)
         {
             return NotFound();
         }
 
-        return user;
+        return CreatorToDto(creator);
     }
 
     // PUT: api/Creators/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutCreator(long id, Creator user)
+    public async Task<IActionResult> PutCreator(long id, CreatorDto creatorDto)
     {
-        if (id != user.UserId)
+        if (id != creatorDto.UserId)
         {
             return BadRequest();
         }
 
-        _context.Entry(user).State = EntityState.Modified;
+        var creator = await _context.Creators.FindAsync(id);
+        if (creator == null)
+        {
+            return NotFound();
+        }
+
+        creator.UserId = creatorDto.UserId;
+        creator.Email = creatorDto.Email;
+        creator.Phone = creatorDto.Phone;
+        creator.FirstName = creatorDto.FirstName;
+        creator.LastName = creatorDto.LastName;
+        creator.PageName = creatorDto.PageName;
+        creator.UrlHandle = creatorDto.UrlHandle;
+
+        _context.Entry(creator).State = EntityState.Modified;
 
         try
         {
@@ -84,16 +102,28 @@ public class CreatorsController : ControllerBase
     // POST: api/Creators
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Creator>> PostCreator(Creator user)
+    public async Task<ActionResult<CreatorDto>> PostCreator(CreatorDto creatorDto)
     {
         if (_context.Creators == null)
         {
-            return Problem("Entity set 'StantreonContext.Creators'  is null.");
+            return Problem("Entity set 'StantreonContext.Creators' is null.");
         }
-        _context.Creators.Add(user);
+
+        var creator = new Creator
+        {
+            UserId = creatorDto.UserId,
+            Email = creatorDto.Email,
+            Phone = creatorDto.Phone,
+            FirstName = creatorDto.FirstName,
+            LastName = creatorDto.LastName,
+            PageName = creatorDto.PageName,
+            UrlHandle = creatorDto.UrlHandle,
+        };
+
+        _context.Creators.Add(creator);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetCreator", new { id = user.UserId }, user);
+        return CreatedAtAction("GetCreator", new { id = creator.UserId }, CreatorToDto(creator));
     }
 
     // DELETE: api/Creators/5
@@ -120,4 +150,16 @@ public class CreatorsController : ControllerBase
     {
         return (_context.Creators?.Any(e => e.UserId == id)).GetValueOrDefault();
     }
+
+    private static CreatorDto CreatorToDto(Creator creator) =>
+        new CreatorDto
+        {
+            UserId = creator.UserId,
+            Email = creator.Email,
+            Phone = creator.Phone,
+            FirstName = creator.FirstName,
+            LastName = creator.LastName,
+            PageName = creator.PageName,
+            UrlHandle = creator.UrlHandle,
+        };
 }
